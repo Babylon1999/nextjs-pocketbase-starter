@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { getTheUserFromCookie, IsLoggedIn } from "@/pb/pbFunctions";
 import Link from "next/link";
-import { IoIosMenu } from "react-icons/io";
-import { RiNextjsFill } from "react-icons/ri";
 
 export default async function SiteHeader() {
   const isLoggedIn = await IsLoggedIn();
@@ -23,14 +21,18 @@ export default async function SiteHeader() {
       <Sheet>
         <SheetTrigger asChild>
           <Button variant="outline" size="icon" className="lg:hidden">
-            <IoIosMenu className="size-6" />
+            <div className="w-6 h-6 flex items-center justify-center">
+              <span className="text-lg">☰</span>
+            </div>
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left">
           <div className="flex items-center justify-between px-4 py-6">
             <Link href="#" prefetch={false}>
-              <RiNextjsFill className="size-9" />
+              <div className="w-9 h-9 bg-black text-white rounded flex items-center justify-center font-bold">
+                N
+              </div>
               <span className="sr-only">Acme Inc</span>
             </Link>
           </div>
@@ -47,7 +49,9 @@ export default async function SiteHeader() {
       </Sheet>
       <div className="hidden items-center gap-6 lg:flex">
         <Link href="#" className="mr-6" prefetch={false}>
-          <RiNextjsFill className="size-9" />
+          <div className="w-9 h-9 bg-black text-white rounded flex items-center justify-center font-bold">
+            N
+          </div>
           <span className="sr-only">Acme Inc</span>
         </Link>
         <nav className="flex items-center gap-6">
@@ -66,7 +70,7 @@ export default async function SiteHeader() {
             {isLoggedIn ? "Dashboard" : "Login"}
           </Button>
         </a>{" "}
-        {isLoggedIn ? <AvatarDropDown SrcLink={avatarSrc} /> : <></>}
+        {isLoggedIn ? await AvatarDropDown({ SrcLink: avatarSrc }) : <></>}
         <ThemeToggle />
       </div>
     </header>

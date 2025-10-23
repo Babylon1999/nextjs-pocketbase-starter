@@ -1,16 +1,17 @@
-"use server";
+"use client";
 
 import SignupForm from "@/components/signUpForm";
 import Script from "next/script";
-import { SiPocketbase } from "react-icons/si";
 
-export default async function SignupComponent() {
+export default function SignupComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-md space-y-6 rounded-lg p-6 shadow-lg">
         <div className="text-center">
           <div className="flex justify-center p-6">
-            <SiPocketbase className="size-12" />
+            <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-lg">PB</span>
+            </div>
           </div>
           <h1 className="text-3xl font-bold">Create Account</h1>
           <p className="">Enter your information to create an account</p>

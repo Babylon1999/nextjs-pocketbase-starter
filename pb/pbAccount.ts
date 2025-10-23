@@ -3,13 +3,13 @@
 import { solveToken } from "./pbCsrfToken";
 import { updateUserData } from "./pbFunctions";
 import { logout } from "./pbLogout";
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeName, sanitizePassword, sanitizeToken } from "@/lib/sanitize";
 
 export async function updateUserMeta(formData: FormData) {
   "use server";
 
-  const name = DOMPurify.sanitize(formData.get("name") as string);
-  const csrf = DOMPurify.sanitize(formData.get("csrf") as string);
+  const name = sanitizeName(formData.get("name") as string);
+  const csrf = sanitizeToken(formData.get("csrf") as string);
 
   if ((await solveToken(csrf)) === false) {
     return {
@@ -41,16 +41,14 @@ export async function updateUserMeta(formData: FormData) {
 
 export async function updatePassword(formData: FormData) {
   "use server";
-  const currentPassword = DOMPurify.sanitize(
+  const currentPassword = sanitizePassword(
     formData.get("current-password") as string
   );
-  const newPassword = DOMPurify.sanitize(
-    formData.get("new-password") as string
-  );
-  const confirmPassword = DOMPurify.sanitize(
+  const newPassword = sanitizePassword(formData.get("new-password") as string);
+  const confirmPassword = sanitizePassword(
     formData.get("confirm-password") as string
   );
-  const csrf = DOMPurify.sanitize(formData.get("csrf") as string);
+  const csrf = sanitizeToken(formData.get("csrf") as string);
 
   // Make sure the passwords match here before calling PB.
   if (newPassword !== confirmPassword) {

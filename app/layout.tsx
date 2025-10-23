@@ -10,11 +10,11 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       {/* suppressHydrationWarning is needed because of a bug in shadcn, for more context
-      : https://github.com/shadcn-ui/ui/issues/5552 
+      : https://github.com/shadcn-ui/ui/issues/5552
       */}
       <html suppressHydrationWarning lang="en">
         <head />
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
 
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
+              {await SiteHeader()}
               <div className="flex-1">{children}</div>
             </div>
           </ThemeProvider>

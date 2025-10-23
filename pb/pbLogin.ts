@@ -1,6 +1,6 @@
 "use server";
 
-import DOMPurify from "isomorphic-dompurify";
+import { sanitizeToken, sanitizeEmail, sanitizePassword } from "@/lib/sanitize";
 import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -8,11 +8,11 @@ const ApiKey = process.env.SECURE_API_KEY as string;
 
 export async function login(formData: any) {
   "use server";
-  const captchaToken = DOMPurify.sanitize(
-    formData.get("cf-turnstile-response")
+  const captchaToken = sanitizeToken(
+    formData.get("cf-turnstile-response") as string
   );
-  const email = DOMPurify.sanitize(formData.get("email"));
-  const password = DOMPurify.sanitize(formData.get("password"));
+  const email = sanitizeEmail(formData.get("email") as string);
+  const password = sanitizePassword(formData.get("password") as string);
   const ip = (await headers()).get("X-Forwarded-For");
 
   // Starting the captcha verification process.

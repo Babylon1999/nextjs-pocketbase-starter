@@ -3,9 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { FaLock } from "react-icons/fa";
-import { FaUserAstronaut } from "react-icons/fa";
-import { MdOutlineSettings } from "react-icons/md";
 
 export default function AccountPageSideBar() {
   const pathname = usePathname();
@@ -24,7 +21,9 @@ export default function AccountPageSideBar() {
               className="flex items-center gap-2 font-semibold"
               prefetch={false}
             >
-              <MdOutlineSettings className="size-6" />
+              <div className="w-6 h-6 bg-gray-600 rounded flex items-center justify-center">
+                <span className="text-white text-xs">⚙</span>
+              </div>
               <span className="">My Account</span>
             </Link>
           </div>
@@ -38,7 +37,9 @@ export default function AccountPageSideBar() {
                     : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 }`}
               >
-                <FaUserAstronaut className="size-4" />
+                <div className="w-4 h-4 bg-gray-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs">👤</span>
+                </div>
                 Profile
               </a>
               <a
@@ -49,7 +50,9 @@ export default function AccountPageSideBar() {
                     : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 }`}
               >
-                <FaLock className="size-4" />
+                <div className="w-4 h-4 bg-gray-500 rounded flex items-center justify-center">
+                  <span className="text-white text-xs">🔒</span>
+                </div>
                 Security
               </a>
             </nav>
