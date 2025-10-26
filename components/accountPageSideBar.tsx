@@ -1,8 +1,8 @@
 "use client";
 
+import { Settings, User, Lock } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React from "react";
 
 export default function AccountPageSideBar() {
   const pathname = usePathname();
@@ -11,52 +11,53 @@ export default function AccountPageSideBar() {
   const isSecurityPage = pathname === "/protected/account/security";
 
   return (
-    <div className="grid w-full lg:min-h-screen">
-      {" "}
-      <div className="border-r lg:block ">
-        <div className="flex flex-col gap-2">
-          <div className="flex h-[60px] items-center px-6">
+    <div className="bg-background">
+      <div className="flex flex-col">
+        <div className="flex h-16 items-center px-6 border-b border-border">
+          <Link
+            href="/protected/account"
+            className="flex items-center gap-2 font-semibold text-foreground"
+          >
+            <Settings className="h-5 w-5" />
+            <span className="text-foreground">Account</span>
+          </Link>
+        </div>
+
+        <nav className="flex-1 px-4 py-6">
+          <div className="space-y-2">
             <Link
-              href="#"
-              className="flex items-center gap-2 font-semibold"
-              prefetch={false}
+              href="/protected/account"
+              className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all w-full ${
+                isAccountPage
+                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+              }`}
             >
-              <div className="w-6 h-6 bg-gray-600 rounded flex items-center justify-center">
-                <span className="text-white text-xs">⚙</span>
-              </div>
-              <span className="">My Account</span>
+              <User className="h-4 w-4" />
+              Profile
+            </Link>
+
+            <Link
+              href="/protected/account/security"
+              className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-all w-full ${
+                isSecurityPage
+                  ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+              }`}
+            >
+              <Lock className="h-4 w-4" />
+              Security
             </Link>
           </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <a
-                href="/protected/account"
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                  isAccountPage
-                    ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50"
-                    : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                }`}
-              >
-                <div className="w-4 h-4 bg-gray-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs">👤</span>
-                </div>
-                Profile
-              </a>
-              <a
-                href="/protected/account/security"
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 transition-all ${
-                  isSecurityPage
-                    ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-gray-50"
-                    : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                }`}
-              >
-                <div className="w-4 h-4 bg-gray-500 rounded flex items-center justify-center">
-                  <span className="text-white text-xs">🔒</span>
-                </div>
-                Security
-              </a>
-            </nav>
-          </div>
+        </nav>
+
+        <div className="px-4 py-4 border-t border-border">
+          <Link
+            href="/protected/dashboard"
+            className="flex items-center justify-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors hover:underline w-full py-2"
+          >
+            ← Back to Dashboard
+          </Link>
         </div>
       </div>
     </div>

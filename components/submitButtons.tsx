@@ -1,113 +1,72 @@
 import { Button } from "./ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
-import React from "react";
+import { Spinner } from "./ui/spinner";
+
+export function SubmitButton({
+  isLoading,
+  canSubmit,
+  label = "Continue",
+  fullWidth = true,
+}: {
+  isLoading: boolean;
+  canSubmit: boolean;
+  label?: string;
+  fullWidth?: boolean;
+}) {
+  if (isLoading) {
+    return (
+      <Button disabled className={fullWidth ? "w-full" : ""}>
+        <Spinner size="sm" className="mr-2" />
+        Please wait
+      </Button>
+    );
+  }
+
+  return (
+    <Button
+      className={fullWidth ? "w-full" : ""}
+      disabled={!canSubmit}
+      type="submit"
+    >
+      {label}
+    </Button>
+  );
+}
 
 export function LoginButton({
   isLoading,
   canSubmit,
+  label = "Continue",
 }: {
   isLoading: boolean;
   canSubmit: boolean;
+  label?: string;
 }) {
-  if (isLoading === true) {
-    return (
-      <Button disabled>
-        <ReloadIcon
-          aria-label="Login Button"
-          role="button"
-          className="mr-2 size-4 animate-spin"
-        />
-        Please wait
-      </Button>
-    );
-  } else {
-    return canSubmit ? (
-      <Button
-        className="bg-foreground"
-        aria-label="Login Button"
-        role="button"
-        type="submit"
-      >
-        Submit
-      </Button>
-    ) : (
-      <Button
-        disabled
-        className="bg-foreground"
-        aria-label="Login Button"
-        role="button"
-        type="submit"
-      >
-        Submit
-      </Button>
-    );
-  }
+  return (
+    <SubmitButton isLoading={isLoading} canSubmit={canSubmit} label={label} />
+  );
 }
 
 export function SignUpButton({
   isLoading,
   canSubmit,
+  label = "Create Account",
 }: {
   isLoading: boolean;
   canSubmit: boolean;
+  label?: string;
 }) {
-  if (isLoading) {
-    return (
-      <Button disabled>
-        <ReloadIcon
-          aria-label="Sign Up Button"
-          role="button"
-          className="mr-2 size-4 animate-spin"
-        />
-        Please wait
-      </Button>
-    );
-  } else {
-    return canSubmit ? (
-      <Button
-        className="bg-foreground"
-        aria-label="Sign Up Button"
-        role="button"
-        type="submit"
-      >
-        Submit
-      </Button>
-    ) : (
-      <Button
-        disabled
-        className="bg-foreground"
-        aria-label="Sign Up Button"
-        role="button"
-        type="submit"
-      >
-        Submit
-      </Button>
-    );
-  }
+  return (
+    <SubmitButton isLoading={isLoading} canSubmit={canSubmit} label={label} />
+  );
 }
 
 export function UpdateUserButton({ isLoading }: { isLoading: boolean }) {
-  if (isLoading) {
-    return (
-      <Button disabled>
-        <ReloadIcon
-          aria-label="Update User Button"
-          role="button"
-          className="mr-2 size-4 animate-spin"
-        />
-        Please wait
-      </Button>
-    );
-  } else {
-    return (
-      <Button
-        className="bg-foreground"
-        aria-label="Update User Button"
-        role="button"
-        type="submit"
-      >
-        Update
-      </Button>
-    );
-  }
+  return (
+    <SubmitButton
+      isLoading={isLoading}
+      canSubmit={true}
+      label="Update"
+      fullWidth={false}
+    />
+  );
 }

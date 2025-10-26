@@ -1,29 +1,70 @@
-"use server";
+"use client";
 
 import AccountPageSideBar from "@/components/accountPageSideBar";
-import PassWordUpdateForm from "@/components/passwordUpdateForm";
-import { generateToken } from "@/pb/pbCsrfToken";
+import PasswordUpdateForm from "@/components/passwordUpdateForm";
+import { H1, Lead } from "@/components/typography";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
-export default async function SecurityPage() {
-  const token = await generateToken();
+export default function SecurityPage() {
+  const { user, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/auth/login");
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Spinner size="lg" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
   return (
-    <div className="grid w-full lg:min-h-screen lg:grid-cols-[280px_1fr]">
-      <AccountPageSideBar />
-      <div className="flex flex-col">
-        <main className="flex-1 overflow-y-auto">
-          <section className="p-6 md:p-10">
-            <div className="mx-auto max-w-3xl">
-              <div className="space-y-6">
-                <div>
-                  <h1 className="text-2xl font-bold">Security Settings</h1>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Update your Security settings.
-                  </p>
-                </div>
-                <PassWordUpdateForm csrfToken={token} />
-              </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+        <div className="lg:w-80 lg:border-r lg:border-border">
+          <AccountPageSideBar />
+        </div>
+
+        <main className="flex-1 overflow-auto">
+          <div className="border-b border-border bg-background">
+            <div className="max-w-4xl mx-auto px-6 py-8">
+              <H1>Security Settings</H1>
+              <Lead className="mt-2">
+                Manage your password and security preferences
+              </Lead>
             </div>
-          </section>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-6 py-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Change Password</CardTitle>
+                <p className="text-sm text-muted-foreground">
+                  Update your password to keep your account secure
+                </p>
+              </CardHeader>
+              <CardContent>
+                <PasswordUpdateForm user={user} />
+              </CardContent>
+            </Card>
+          </div>
         </main>
       </div>
     </div>

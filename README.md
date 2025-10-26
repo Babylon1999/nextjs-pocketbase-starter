@@ -1,99 +1,77 @@
-# Next.js & PocketBase Demo that supports SSR & App Router
 
-[![Watch the video](https://github.com/user-attachments/assets/19f1b3b0-1775-483c-ba22-54de02cc9fbc)](https://github.com/user-attachments/assets/19f1b3b0-1775-483c-ba22-54de02cc9fbc)
+# Next.js PocketBase Starter
 
-### Pages
+A starter template with Next.js 14, PocketBase backend, and authentication including password and OTP login with Cloudflare Turnstile captcha protection.
 
-- Login
-- Signup
-- Account Page (to edit user meta or password)
-- Protected Dashboard
+## Quick Start
 
-### Features
-
-- Turnstile captcha protection for login and signup pages
-- Basic CSRF protection for account pages
-- IP-based rate limiter
-- Middleware
-
-> [!IMPORTANT]
-> The rate limiter identifies incoming requests by their IP address. To ensure this works correctly, set the `True IP Header` in the PocketBase settings to `PB-USER-IP`. Note that in this demo, the user's IP is retrieved from the `X-Forwarded-For header`.
-
-# Instructions
-
-## Pocketbase
-
-### Generate key
-
-First, create a folder named `pb_hook` next to your Pocketbase executable. Inside it, create a file named `main.pb.js` and add the code snippet below to it. Make sure to replace `your-secure-api-key-here` with a long random string.
-
-Without this key, Pocketbase will return a `403` error.
-
-```javascript
-function donotLetAnyoneIn(next) {
-  return (c) => {
-    const header = c.request().header.get("X-POCKETBASE-API-KEY");
-    const secureAPIkey = "your-secure-api-key-here";
-    if (header !== secureAPIkey) {
-      throw new ForbiddenError("What are you doing here?");
-    }
-    return next(c);
-  };
-}
-
-routerUse(donotLetAnyoneIn);
-```
-
-### Modify Users Schema
-
-In order for the account page to work, you need to add two fields to the users collection `secret` (text) and `secretExpire` (number). These will be used in the form submission for CSRF protection.
-
-## Environment Variables
-
-There's already a `.env.example` file, you only need to rename it to `.env` and add your values.
-
-This demo uses [CloudFlare Turnstile](https://www.cloudflare.com/en-gb/products/turnstile/) captcha to secure the login/signup pages. If you don't have a Cloudflare account, you'll need to sign up.
-
-To generate your keys go to `Dashboard` -> `Turnstile` -> `Add site`.
-
-```env
-# Your Pocketbase URL
-PB_URL=http://127.0.0.1:6969
-
-# Next.js website URL
-WEBSITE_URL=http://localhost:3000
-
-# Long secret key created earlier
-SECURE_API_KEY=pBHsob5OszL5gD9cJT7tBKnGMQ7oTi9BmbVKLMxZdh0K7xEiOmKYqR59k8NIO7eb5LtM5Qvev9K8tLnOLvTCBnejiiR5HJ3x9BXvqLITjod7AAaeWEUT0E9I2Ti5sjO3
-
-# Public key shipped to the browser
-NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=0x4AA
-
-# Secret key used to validate the token on the server side
-CLOUDFLARE_TURNSTILE_SECRET_KEY=0x4A
-```
-
-## NEXT.JS
-
-To install the packages:
-
-    npm run install
-
-To run or build the app:
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Copy `.env.example` to `.env.local` and update the values:
+   ```bash
+   cp .env.example .env.local
+   ```
+4. Rename `.env.example` to `.env` and add the following environment variables:
 
 ```
-npm run dev
-
-npm run build
-
-npm run start
-
-// will run both build and start
-npm run preview
+    # Your pb url
+    NEXT_PUBLIC_POCKETBASE_URL=https://your-pb-instance-url.com
+    # NEXT.JS website URL
+    WEBSITE_URL=http://localhost:3000
+    # This is the public key that will be shipped to the browser
+    NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY=0x
+    # This is the secret key used to validate the token in the server side.
+    CLOUDFLARE_TURNSTILE_SECRET_KEY=0x
 ```
 
-## Accessing the admin dashboard
+5. Start the development server:
+   ```bash
+   npm run dev
+   ```
+6. Open [http://localhost:3000](http://localhost:3000)
 
-Since your `pb` instance now expects an API key in the header, you will no longer be able to access the admin dashboard as well.
+## Pages & Layout
 
-To fix this, you'll need to pass your API key in the request header via something like [Requestly](https://requestly.com/).
+- `/` - Landing page with setup instructions
+- `/auth/login` - Login page with password and OTP options
+- `/auth/signup` - User registration with captcha
+- `/auth/reset-password` - Password reset request
+- `/auth/confirm-password-reset/[token]` - Password reset confirmation
+- `/protected/dashboard` - Protected dashboard page
+- `/protected/account` - User profile management
+- `/protected/account/security` - Password change and security settings
+
+The layout includes a global header with navigation and a global footer with ACME branding.
+
+## Captcha Setup with PocketBase Hooks
+
+This template uses Cloudflare Turnstile captcha to protect login, signup, and OTP requests. To enable captcha verification:
+
+1. Copy `pb_hooks_examples/main.pb.js` to your PocketBase `pb_hooks` directory
+2. Replace `"your-cf-secret-code"` with your actual Cloudflare Turnstile secret key
+3. Restart PocketBase
+
+The hooks validate captcha tokens for:
+- OTP requests (`onRecordRequestOTPRequest`)
+- User creation (`onRecordCreateRequest`)
+
+Make sure your PocketBase instance can reach `https://challenges.cloudflare.com` for captcha verification.
+
+## Features
+
+- **Authentication**: Password login and OTP (One-Time Password) via email
+- **Captcha Protection**: Cloudflare Turnstile integration for all auth forms
+- **Protected Routes**: Automatic redirect to login for unauthenticated users
+- **Account Management**: Update profile, change password, delete account
+- **OTP Features**: 180-second expiration, auto-redirect, persistent state
+- **UI Components**: Built with shadcn/ui and Tailwind CSS
+
+## Scripts
+
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint

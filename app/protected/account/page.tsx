@@ -1,32 +1,76 @@
-"use server";
+"use client";
 
 import AccountPageSideBar from "@/components/accountPageSideBar";
-import UserMetaUpdateForm from "@/components/userMetaUpdateForm";
-import { generateToken } from "@/pb/pbCsrfToken";
-import { getTheUserFromCookie } from "@/pb/pbFunctions";
+import { H1, Lead } from "@/components/typography";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import UpdateUser from "@/components/updateUser";
+import { useUser } from "@/contexts/UserContext";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { toast } from "sonner";
 
-export default async function AccountPage() {
-  const user = await getTheUserFromCookie();
-  const userName = user.name;
-  const token = await generateToken();
+export default function AccountPage() {
+  const { user, isLoading } = useUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/auth/login");
+    }
+  }, [user, isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Spinner size="lg" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
   return (
-    <div className="grid w-full lg:min-h-screen lg:grid-cols-[280px_1fr]">
-      <AccountPageSideBar />
-      <div className="flex flex-col">
-        <main className="flex-1 overflow-y-auto">
-          <section className="p-6 md:p-10">
-            <div className="mx-auto max-w-3xl">
-              <div className="space-y-6">
-                <div>
-                  <h1 className="text-2xl font-bold">Profile</h1>
-                  <p className="text-gray-500 dark:text-gray-400">
-                    Update your profile settings.
-                  </p>
-                </div>
-                <UserMetaUpdateForm user={userName} csrfToken={token} />
-              </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex flex-col lg:flex-row flex-1 min-h-0">
+        <div className="lg:w-80 lg:border-r lg:border-border">
+          <AccountPageSideBar />
+        </div>
+
+        <main className="flex-1 overflow-auto">
+          <div className="border-b border-border bg-background">
+            <div className="max-w-4xl mx-auto px-6 py-8">
+              <H1>Profile Settings</H1>
+              <Lead className="mt-2">
+                Manage your account settings and preferences
+              </Lead>
             </div>
-          </section>
+          </div>
+
+          <div className="max-w-4xl mx-auto px-6 py-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Personal Information</CardTitle>
+                <CardDescription>
+                  Update your personal details and contact information
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <UpdateUser user={user} />
+              </CardContent>
+            </Card>
+          </div>
         </main>
       </div>
     </div>
