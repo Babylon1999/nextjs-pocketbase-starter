@@ -1,7 +1,7 @@
 
 # Next.js PocketBase Starter
 
-A starter template with Next.js 14, PocketBase backend, and authentication including password and OTP login with Cloudflare Turnstile captcha protection.
+A starter template with Next.js 15, PocketBase backend, and authentication including password and OTP login with Cloudflare Turnstile captcha protection.
 
 ## Quick Start
 
