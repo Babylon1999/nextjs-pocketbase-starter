@@ -10,10 +10,8 @@ A starter template with Next.js 15, PocketBase backend, and authentication inclu
    ```bash
    npm install
    ```
-3. Copy `.env.example` to `.env.local` and update the values:
-   ```bash
-   cp .env.example .env.local
-   ```
+3. Copy `.env.example` to `.env` and update the values:
+
 4. Rename `.env.example` to `.env` and add the following environment variables:
 
 ```
