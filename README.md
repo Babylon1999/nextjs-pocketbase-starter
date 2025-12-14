@@ -12,8 +12,6 @@ A starter template with Next.js 15, PocketBase backend, and authentication inclu
    ```
 3. Copy `.env.example` to `.env` and update the values:
 
-4. Rename `.env.example` to `.env` and add the following environment variables:
-
 ```
     # Your pb url
     NEXT_PUBLIC_POCKETBASE_URL=https://your-pb-instance-url.com
@@ -25,11 +23,11 @@ A starter template with Next.js 15, PocketBase backend, and authentication inclu
     CLOUDFLARE_TURNSTILE_SECRET_KEY=0x
 ```
 
-5. Start the development server:
+4. Start the development server:
    ```bash
    npm run dev
    ```
-6. Open [http://localhost:3000](http://localhost:3000)
+5. Open [http://localhost:3000](http://localhost:3000)
 
 ## Pages & Layout
 
